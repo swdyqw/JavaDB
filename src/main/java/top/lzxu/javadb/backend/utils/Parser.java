@@ -34,10 +34,10 @@ public class Parser {
         return ByteBuffer.allocate(Long.SIZE / Byte.SIZE).putLong(value).array();
     }
 
-    public static top.guoziyang.mydb.backend.utils.ParseStringRes parseString(byte[] raw) {
+    public static ParseStringRes parseString(byte[] raw) {
         int length = parseInt(Arrays.copyOf(raw, 4));
         String str = new String(Arrays.copyOfRange(raw, 4, 4+length));
-        return new top.guoziyang.mydb.backend.utils.ParseStringRes(str, length+4);
+        return new ParseStringRes(str, length+4);
     }
 
     public static byte[] string2Byte(String str) {
