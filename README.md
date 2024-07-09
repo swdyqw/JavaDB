@@ -41,3 +41,5 @@ mvn exec:java -Dexec.mainClass="top.lzxu.javadb.client.Launcher"
 ```
 
 会启动一个交互式命令行，就可以在这里输入类 SQL 语法，回车会发送语句到服务，并输出执行的结果。
+![image](https://github.com/swdyqw/JavaDB/assets/155432770/80ef7c0f-4c6d-4d0c-a2cd-c5ceea607776)
+
