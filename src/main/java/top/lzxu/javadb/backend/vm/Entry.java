@@ -1,12 +1,12 @@
-package top.guoziyang.mydb.backend.vm;
+package top.lzxu.javadb.backend.vm;
 
 import java.util.Arrays;
 
 import com.google.common.primitives.Bytes;
 
-import top.guoziyang.mydb.backend.common.SubArray;
-import top.guoziyang.mydb.backend.dm.dataItem.DataItem;
-import top.guoziyang.mydb.backend.utils.Parser;
+import top.lzxu.javadb.backend.common.SubArray;
+import top.lzxu.javadb.backend.dm.dataItem.DataItem;
+import top.lzxu.javadb.backend.utils.Parser;
 
 /**
  * VM向上层抽象出entry
