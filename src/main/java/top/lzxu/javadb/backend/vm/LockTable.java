@@ -1,4 +1,4 @@
-package top.guoziyang.mydb.backend.vm;
+package top.lzxu.javadb.backend.vm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import top.guoziyang.mydb.common.Error;
+import top.lzxu.javadb.common.Error;
 
 /**
  * 维护了一个依赖等待图，以进行死锁检测
