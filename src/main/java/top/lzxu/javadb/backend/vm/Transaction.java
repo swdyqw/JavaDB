@@ -1,9 +1,9 @@
-package top.guoziyang.mydb.backend.vm;
+package top.lzxu.javadb.backend.vm;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import top.guoziyang.mydb.backend.tm.TransactionManagerImpl;
+import top.lzxu.javadb.backend.tm.TransactionManagerImpl;
 
 // vm对一个事务的抽象
 public class Transaction {
