@@ -15,7 +15,7 @@ public interface DataManager {
         PageCache pc = PageCache.create(path, mem);
         Logger lg = Logger.create(path);
 
-        top.guoziyang.mydb.backend.dm.DataManagerImpl dm = new top.guoziyang.mydb.backend.dm.DataManagerImpl(pc, lg, tm);
+        DataManagerImpl dm = new DataManagerImpl(pc, lg, tm);
         dm.initPageOne();
         return dm;
     }
@@ -23,9 +23,9 @@ public interface DataManager {
     public static DataManager open(String path, long mem, TransactionManager tm) {
         PageCache pc = PageCache.open(path, mem);
         Logger lg = Logger.open(path);
-        top.guoziyang.mydb.backend.dm.DataManagerImpl dm = new top.guoziyang.mydb.backend.dm.DataManagerImpl(pc, lg, tm);
+        DataManagerImpl dm = new DataManagerImpl(pc, lg, tm);
         if(!dm.loadCheckPageOne()) {
-            top.guoziyang.mydb.backend.dm.Recover.recover(tm, lg, pc);
+            Recover.recover(tm, lg, pc);
         }
         dm.fillPageIndex();
         PageOne.setVcOpen(dm.pageOne);
