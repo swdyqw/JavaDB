@@ -1,4 +1,4 @@
-package top.lzxu.javadb.backend.utils;
+package top.lzxu.javadb.backend.parser;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
