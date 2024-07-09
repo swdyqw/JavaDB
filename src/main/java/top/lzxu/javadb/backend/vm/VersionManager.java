@@ -1,7 +1,7 @@
-package top.guoziyang.mydb.backend.vm;
+package top.lzxu.javadb.backend.vm;
 
-import top.guoziyang.mydb.backend.dm.DataManager;
-import top.guoziyang.mydb.backend.tm.TransactionManager;
+import top.lzxu.javadb.backend.dm.DataManager;
+import top.lzxu.javadb.backend.tm.TransactionManager;
 
 public interface VersionManager {
     byte[] read(long xid, long uid) throws Exception;
