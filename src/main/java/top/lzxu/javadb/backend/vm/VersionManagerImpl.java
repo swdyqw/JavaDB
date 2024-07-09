@@ -1,16 +1,18 @@
-package top.guoziyang.mydb.backend.vm;
+package top.lzxu.javadb.backend.vm;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import top.guoziyang.mydb.backend.common.AbstractCache;
-import top.guoziyang.mydb.backend.dm.DataManager;
-import top.guoziyang.mydb.backend.tm.TransactionManager;
-import top.guoziyang.mydb.backend.tm.TransactionManagerImpl;
-import top.guoziyang.mydb.backend.utils.Panic;
-import top.guoziyang.mydb.common.Error;
+import top.lzxu.javadb.backend.common.AbstractCache;
+import top.lzxu.javadb.backend.dm.DataManager;
+import top.lzxu.javadb.backend.tm.TransactionManager;
+import top.lzxu.javadb.backend.tm.TransactionManagerImpl;
+import top.lzxu.javadb.backend.utils.Panic;
+import top.lzxu.javadb.common.Error;
+
+import static top.lzxu.javadb.backend.vm.Visibility.isVisible;
 
 public class VersionManagerImpl extends AbstractCache<Entry> implements VersionManager {
 
@@ -18,22 +20,22 @@ public class VersionManagerImpl extends AbstractCache<Entry> implements VersionM
     DataManager dm;
     Map<Long, Transaction> activeTransaction;
     Lock lock;
-    LockTable lt;
+    top.lzxu.javadb.backend.vm.LockTable lt;
 
     public VersionManagerImpl(TransactionManager tm, DataManager dm) {
         super(0);
         this.tm = tm;
         this.dm = dm;
         this.activeTransaction = new HashMap<>();
-        activeTransaction.put(TransactionManagerImpl.SUPER_XID, Transaction.newTransaction(TransactionManagerImpl.SUPER_XID, 0, null));
+        activeTransaction.put(TransactionManagerImpl.SUPER_XID, top.lzxu.javadb.backend.vm.Transaction.newTransaction(TransactionManagerImpl.SUPER_XID, 0, null));
         this.lock = new ReentrantLock();
-        this.lt = new LockTable();
+        this.lt = new top.lzxu.javadb.backend.vm.LockTable();
     }
 
     @Override
     public byte[] read(long xid, long uid) throws Exception {
         lock.lock();
-        Transaction t = activeTransaction.get(xid);
+        top.lzxu.javadb.backend.vm.Transaction t = activeTransaction.get(xid);
         lock.unlock();
 
         if(t.err != null) {
@@ -51,7 +53,7 @@ public class VersionManagerImpl extends AbstractCache<Entry> implements VersionM
             }
         }
         try {
-            if(Visibility.isVisible(tm, t, entry)) {
+            if(isVisible(tm, t, entry)) {
                 return entry.data();
             } else {
                 return null;
@@ -64,21 +66,21 @@ public class VersionManagerImpl extends AbstractCache<Entry> implements VersionM
     @Override
     public long insert(long xid, byte[] data) throws Exception {
         lock.lock();
-        Transaction t = activeTransaction.get(xid);
+        top.lzxu.javadb.backend.vm.Transaction t = activeTransaction.get(xid);
         lock.unlock();
 
         if(t.err != null) {
             throw t.err;
         }
 
-        byte[] raw = Entry.wrapEntryRaw(xid, data);
+        byte[] raw = top.lzxu.javadb.backend.vm.Entry.wrapEntryRaw(xid, data);
         return dm.insert(xid, raw);
     }
 
     @Override
     public boolean delete(long xid, long uid) throws Exception {
         lock.lock();
-        Transaction t = activeTransaction.get(xid);
+        top.lzxu.javadb.backend.vm.Transaction t = activeTransaction.get(xid);
         lock.unlock();
 
         if(t.err != null) {
@@ -95,7 +97,7 @@ public class VersionManagerImpl extends AbstractCache<Entry> implements VersionM
             }
         }
         try {
-            if(!Visibility.isVisible(tm, t, entry)) {
+            if(!isVisible(tm, t, entry)) {
                 return false;
             }
             Lock l = null;
@@ -116,7 +118,7 @@ public class VersionManagerImpl extends AbstractCache<Entry> implements VersionM
                 return false;
             }
 
-            if(Visibility.isVersionSkip(tm, t, entry)) {
+            if(top.lzxu.javadb.backend.vm.Visibility.isVersionSkip(tm, t, entry)) {
                 t.err = Error.ConcurrentUpdateException;
                 internAbort(xid, true);
                 t.autoAborted = true;
@@ -136,7 +138,7 @@ public class VersionManagerImpl extends AbstractCache<Entry> implements VersionM
         lock.lock();
         try {
             long xid = tm.begin();
-            Transaction t = Transaction.newTransaction(xid, level, activeTransaction);
+            top.lzxu.javadb.backend.vm.Transaction t = top.lzxu.javadb.backend.vm.Transaction.newTransaction(xid, level, activeTransaction);
             activeTransaction.put(xid, t);
             return xid;
         } finally {
@@ -147,7 +149,7 @@ public class VersionManagerImpl extends AbstractCache<Entry> implements VersionM
     @Override
     public void commit(long xid) throws Exception {
         lock.lock();
-        Transaction t = activeTransaction.get(xid);
+        top.lzxu.javadb.backend.vm.Transaction t = activeTransaction.get(xid);
         lock.unlock();
 
         try {
@@ -175,7 +177,7 @@ public class VersionManagerImpl extends AbstractCache<Entry> implements VersionM
 
     private void internAbort(long xid, boolean autoAborted) {
         lock.lock();
-        Transaction t = activeTransaction.get(xid);
+        top.lzxu.javadb.backend.vm.Transaction t = activeTransaction.get(xid);
         if(!autoAborted) {
             activeTransaction.remove(xid);
         }
@@ -192,7 +194,7 @@ public class VersionManagerImpl extends AbstractCache<Entry> implements VersionM
 
     @Override
     protected Entry getForCache(long uid) throws Exception {
-        Entry entry = Entry.loadEntry(this, uid);
+        top.lzxu.javadb.backend.vm.Entry entry = top.lzxu.javadb.backend.vm.Entry.loadEntry(this, uid);
         if(entry == null) {
             throw Error.NullEntryException;
         }
