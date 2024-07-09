@@ -13,7 +13,7 @@ public class PageIndex {
     private static final int THRESHOLD = PageCache.PAGE_SIZE / INTERVALS_NO;
 
     private Lock lock;
-    private List<top.guoziyang.mydb.backend.dm.pageIndex.PageInfo>[] lists;
+    private List<PageInfo>[] lists;
 
     @SuppressWarnings("unchecked")
     public PageIndex() {
@@ -28,13 +28,13 @@ public class PageIndex {
         lock.lock();
         try {
             int number = freeSpace / THRESHOLD;
-            lists[number].add(new top.guoziyang.mydb.backend.dm.pageIndex.PageInfo(pgno, freeSpace));
+            lists[number].add(new PageInfo(pgno, freeSpace));
         } finally {
             lock.unlock();
         }
     }
 
-    public top.guoziyang.mydb.backend.dm.pageIndex.PageInfo select(int spaceSize) {
+    public PageInfo select(int spaceSize) {
         lock.lock();
         try {
             int number = spaceSize / THRESHOLD;
