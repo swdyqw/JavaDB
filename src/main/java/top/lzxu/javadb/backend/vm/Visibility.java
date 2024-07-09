@@ -1,6 +1,6 @@
-package top.guoziyang.mydb.backend.vm;
+package top.lzxu.javadb.backend.vm;
 
-import top.guoziyang.mydb.backend.tm.TransactionManager;
+import top.lzxu.javadb.backend.tm.TransactionManager;
 
 public class Visibility {
     
