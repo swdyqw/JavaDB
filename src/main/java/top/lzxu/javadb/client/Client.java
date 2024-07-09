@@ -4,10 +4,10 @@ import top.lzxu.javadb.transport.Package;
 import top.lzxu.javadb.transport.Packager;
 
 public class Client {
-    private top.guoziyang.mydb.client.RoundTripper rt;
+    private RoundTripper rt;
 
     public Client(Packager packager) {
-        this.rt = new top.guoziyang.mydb.client.RoundTripper(packager);
+        this.rt = new RoundTripper(packager);
     }
 
     public byte[] execute(byte[] stat) throws Exception {
