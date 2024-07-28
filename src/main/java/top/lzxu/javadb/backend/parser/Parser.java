@@ -16,11 +16,10 @@ import top.lzxu.javadb.backend.parser.statement.SingleExpression;
 import top.lzxu.javadb.backend.parser.statement.Update;
 import top.lzxu.javadb.backend.parser.statement.Where;
 import top.lzxu.javadb.common.Error;
-import top.lzxu.javadb.backend.parser.Tokenizer;
 
 public class Parser {
     public static Object Parse(byte[] statement) throws Exception {
-        Tokenizer tokenizer = new Tokenizer(statement);
+        top.lzxu.javadb.backend.parser.Tokenizer tokenizer = new top.lzxu.javadb.backend.parser.Tokenizer(statement);
         String token = tokenizer.peek();
         tokenizer.pop();
 
@@ -81,7 +80,7 @@ public class Parser {
         return stat;
     }
 
-    private static Show parseShow(Tokenizer tokenizer) throws Exception {
+    private static Show parseShow(top.lzxu.javadb.backend.parser.Tokenizer tokenizer) throws Exception {
         String tmp = tokenizer.peek();
         if("".equals(tmp)) {
             return new Show();
@@ -89,7 +88,7 @@ public class Parser {
         throw Error.InvalidCommandException;
     }
 
-    private static Update parseUpdate(Tokenizer tokenizer) throws Exception {
+    private static Update parseUpdate(top.lzxu.javadb.backend.parser.Tokenizer tokenizer) throws Exception {
         Update update = new Update();
         update.tableName = tokenizer.peek();
         tokenizer.pop();
@@ -120,7 +119,7 @@ public class Parser {
         return update;
     }
 
-    private static Delete parseDelete(Tokenizer tokenizer) throws Exception {
+    private static Delete parseDelete(top.lzxu.javadb.backend.parser.Tokenizer tokenizer) throws Exception {
         Delete delete = new Delete();
 
         if(!"from".equals(tokenizer.peek())) {
@@ -139,7 +138,7 @@ public class Parser {
         return delete;
     }
 
-    private static Insert parseInsert(Tokenizer tokenizer) throws Exception {
+    private static Insert parseInsert(top.lzxu.javadb.backend.parser.Tokenizer tokenizer) throws Exception {
         Insert insert = new Insert();
 
         if(!"into".equals(tokenizer.peek())) {
@@ -173,7 +172,7 @@ public class Parser {
         return insert;
     }
 
-    private static Select parseSelect(Tokenizer tokenizer) throws Exception {
+    private static Select parseSelect(top.lzxu.javadb.backend.parser.Tokenizer tokenizer) throws Exception {
         Select read = new Select();
 
         List<String> fields = new ArrayList<>();
@@ -220,7 +219,7 @@ public class Parser {
         return read;
     }
 
-    private static Where parseWhere(Tokenizer tokenizer) throws Exception {
+    private static Where parseWhere(top.lzxu.javadb.backend.parser.Tokenizer tokenizer) throws Exception {
         Where where = new Where();
 
         if(!"where".equals(tokenizer.peek())) {
@@ -251,9 +250,9 @@ public class Parser {
         return where;
     }
 
-    private static SingleExpression parseSingleExp(Tokenizer tokenizer) throws Exception {
+    private static SingleExpression parseSingleExp(top.lzxu.javadb.backend.parser.Tokenizer tokenizer) throws Exception {
         SingleExpression exp = new SingleExpression();
-
+        
         String field = tokenizer.peek();
         if(!isName(field)) {
             throw Error.InvalidCommandException;
@@ -281,7 +280,7 @@ public class Parser {
         return ("and".equals(op) || "or".equals(op));
     }
 
-    private static Drop parseDrop(Tokenizer tokenizer) throws Exception {
+    private static Drop parseDrop(top.lzxu.javadb.backend.parser.Tokenizer tokenizer) throws Exception {
         if(!"table".equals(tokenizer.peek())) {
             throw Error.InvalidCommandException;
         }
@@ -296,13 +295,13 @@ public class Parser {
         if(!"".equals(tokenizer.peek())) {
             throw Error.InvalidCommandException;
         }
-
+        
         Drop drop = new Drop();
         drop.tableName = tableName;
         return drop;
     }
 
-    private static Create parseCreate(Tokenizer tokenizer) throws Exception {
+    private static Create parseCreate(top.lzxu.javadb.backend.parser.Tokenizer tokenizer) throws Exception {
         if(!"table".equals(tokenizer.peek())) {
             throw Error.InvalidCommandException;
         }
@@ -336,7 +335,7 @@ public class Parser {
             fNames.add(field);
             fTypes.add(fieldType);
             tokenizer.pop();
-
+            
             String next = tokenizer.peek();
             if(",".equals(next)) {
                 continue;
@@ -380,24 +379,24 @@ public class Parser {
 
     private static boolean isType(String tp) {
         return ("int32".equals(tp) || "int64".equals(tp) ||
-                "string".equals(tp));
+        "string".equals(tp));
     }
 
-    private static Abort parseAbort(Tokenizer tokenizer) throws Exception {
+    private static Abort parseAbort(top.lzxu.javadb.backend.parser.Tokenizer tokenizer) throws Exception {
         if(!"".equals(tokenizer.peek())) {
             throw Error.InvalidCommandException;
         }
         return new Abort();
     }
 
-    private static Commit parseCommit(Tokenizer tokenizer) throws Exception {
+    private static Commit parseCommit(top.lzxu.javadb.backend.parser.Tokenizer tokenizer) throws Exception {
         if(!"".equals(tokenizer.peek())) {
             throw Error.InvalidCommandException;
         }
         return new Commit();
     }
 
-    private static Begin parseBegin(Tokenizer tokenizer) throws Exception {
+    private static Begin parseBegin(top.lzxu.javadb.backend.parser.Tokenizer tokenizer) throws Exception {
         String isolation = tokenizer.peek();
         Begin begin = new Begin();
         if("".equals(isolation)) {
