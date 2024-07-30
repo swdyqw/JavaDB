@@ -22,7 +22,7 @@ JavaDB 是一个 Java 实现的简单的数据库，原理参照自 MySQL以及 
 mvn compile
 ```
 
-接着执行以下命令以 /tmp/javadb 作为路径创建数据库：
+接着执行以下命令以 /tmp/javadb （这里为示例路径，具体路径以个人实际路径为准）作为路径创建数据库：
 
 ```
 mvn exec:java -Dexec.mainClass="top.lzxu.javadb.backend.Launcher" -Dexec.args="-create /tmp/javadb"
